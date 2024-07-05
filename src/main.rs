@@ -1,7 +1,10 @@
-use clap::Parser;
 mod cli;
 mod package_manager;
-use package_manager::PackageManager;
+mod utils;
+
+use crate::package_manager::PackageManager;
+
+use clap::Parser;
 
 fn main() {
     let args = cli::Args::parse();

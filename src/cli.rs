@@ -1,4 +1,5 @@
 use crate::package_manager;
+
 use clap::Parser;
 
 #[derive(Parser, Debug)]
@@ -9,12 +10,4 @@ pub struct Args {
 
     #[clap(subcommand)]
     pub sub_command: package_manager::SubCommand,
-    // #[clap(
-    //     requires = "sub_command",
-    //     default_value = "",
-    //     trailing_var_arg = true,
-    //     allow_hyphen_values = true,
-    //     hide = true
-    // )]
-    // pub packages: Vec<String>,
 }

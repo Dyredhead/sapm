@@ -1,45 +1,36 @@
-use clap::Subcommand;
-use serde::{Deserialize, Serialize};
+use crate::utils::combine_vectors;
+
 use std::path::PathBuf;
 use std::process::Command;
-use SAPM::combine_vectors;
+
+use clap::Subcommand;
+use serde::{Deserialize, Serialize};
+
 #[derive(Deserialize, Serialize)]
 pub struct PackageManager {
     path: std::path::PathBuf,
 
-    auto_remove: Vec<String>,
-    clean: Vec<String>,
-    install: Vec<String>,
-    list: Vec<String>,
-    purge: Vec<String>,
-    uninstall: Vec<String>,
     find: Vec<String>,
     info: Vec<String>,
+    install: Vec<String>,
+    list: Vec<String>,
+    uninstall: Vec<String>,
     update: Vec<String>,
-    upgrade: Vec<String>,
 }
 #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Subcommand)]
 pub enum SubCommand {
-    ///
-    AutoRemove,
-    ///
-    Clean,
-    /// Install specified package(s)
-    Install { packages: Vec<String> },
-    /// List installed packages
-    List,
-    ///
-    Purge,
-    /// Uninstall specified package(s)
-    Uninstall { packages: Vec<String> },
-    /// Find a package
+    /// Find the specified package
     Find { package: String },
-    /// Get information about a package
+    /// Get the information about a package
     Info { package: String },
-    /// Updates packages
+    /// Install the specified package(s)
+    Install { packages: Vec<String> },
+    /// List all of the installed packages
+    List,
+    /// Uninstall the specified package(s)
+    Uninstall { packages: Vec<String> },
+    /// Update all packages
     Update,
-    /// Upgrade specific package(s)
-    Upgrade { packages: Vec<String> },
 }
 
 impl PackageManager {
@@ -50,7 +41,7 @@ impl PackageManager {
     pub fn generate_command(package_manager: PackageManager, subcommand: SubCommand) -> Command {
         let mut command = Command::new(&package_manager.path);
         let args =
-            self::PackageManager::map_command_to_package_manager(package_manager, subcommand);
+            self::PackageManager::match_subcommand_to_package_manager(package_manager, subcommand);
         for arg in args {
             command.arg(arg);
         }
@@ -58,23 +49,29 @@ impl PackageManager {
     }
 
     // function for mapping the command to the package manager
-    fn map_command_to_package_manager(
+    fn match_subcommand_to_package_manager(
         package_manager: PackageManager,
         sub_command: SubCommand,
     ) -> Vec<String> {
         match sub_command {
-            SubCommand::AutoRemove => package_manager.auto_remove,
-            SubCommand::Clean => package_manager.clean,
-            SubCommand::Install { packages } => combine_vectors(package_manager.install, packages),
-            SubCommand::List => package_manager.list,
-            SubCommand::Purge => package_manager.purge,
-            SubCommand::Uninstall { packages } => {
-                combine_vectors(package_manager.uninstall, packages)
+            SubCommand::Find { package } => {
+                return combine_vectors(package_manager.find, vec![package]);
             }
-            SubCommand::Find { package } => combine_vectors(package_manager.find, vec![package]),
-            SubCommand::Info { package } => combine_vectors(package_manager.info, vec![package]),
-            SubCommand::Update => package_manager.update,
-            SubCommand::Upgrade { packages } => combine_vectors(package_manager.upgrade, packages),
+            SubCommand::Info { package } => {
+                return combine_vectors(package_manager.info, vec![package]);
+            }
+            SubCommand::Install { packages } => {
+                return combine_vectors(package_manager.install, packages);
+            }
+            SubCommand::List => {
+                return package_manager.list;
+            }
+            SubCommand::Uninstall { packages } => {
+                return combine_vectors(package_manager.uninstall, packages);
+            }
+            SubCommand::Update => {
+                return package_manager.update;
+            }
         }
     }
 
