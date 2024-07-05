@@ -20,7 +20,7 @@ pub struct PackageManager {
 pub enum SubCommand {
     /// Find the specified package
     Find { package: String },
-    /// Get the information about a package
+    /// Get information about the specified package
     Info { package: String },
     /// Install the specified package(s)
     Install { packages: Vec<String> },
