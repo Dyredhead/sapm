@@ -1,0 +1,10 @@
+{
+	"path": "/usr/bin/dnf",
+	
+	"find": ["search"],
+	"info": ["info"],
+	"install": ["install"],
+	"list": ["list"],
+	"uninstall": ["remove"],
+	"update": ["update"],
+}
