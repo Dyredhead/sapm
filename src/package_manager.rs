@@ -1,6 +1,5 @@
 use crate::utils::combine_vectors;
 
-use std::path::PathBuf;
 use std::process::Command;
 
 use clap::Subcommand;
@@ -75,24 +74,17 @@ impl PackageManager {
         }
     }
 
-    // TODO: Add support for $XDG specifcation
     // TODO: maybe use another format for the package manager config that is not json
     pub fn from_name(name: &str) -> Option<Self> {
-        const DATA_DIRS: [&str; 2] = [
-            "/home/dyredhead/.local/share/sapm/package_managers/",
-            "/usr/share/sapm/package_managers/",
-        ];
-
-        for data_dir in DATA_DIRS {
-            let package_managers = std::fs::read_dir(PathBuf::from(data_dir)).unwrap();
-            for package_manager in package_managers {
-                let package_manager = package_manager.unwrap();
-                if package_manager.file_name() == (name.to_string() + ".json").as_str() {
-                    println!(
-                        "Found package manager config: {}",
-                        package_manager.path().display()
-                    );
-                    return Self::from_file(package_manager.path());
+        for data_dir in xdg::BaseDirectories::get_data_dirs(
+            &xdg::BaseDirectories::with_prefix("sapm/package_managers").unwrap(),
+        ) {
+            if let Ok(package_managers) = std::fs::read_dir(data_dir) {
+                for package_manager in package_managers {
+                    let package_manager = package_manager.unwrap();
+                    if package_manager.file_name() == (name.to_string() + ".json").as_str() {
+                        return Self::from_file(package_manager.path());
+                    }
                 }
             }
         }
