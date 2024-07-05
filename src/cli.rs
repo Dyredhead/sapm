@@ -5,7 +5,7 @@ use clap::Parser;
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None, arg_required_else_help = true)]
 pub struct Args {
-    #[clap(long, default_value = "default", env = "SAPM_DEFAULT_PACKAGE_MANAGER")]
+    #[clap(long, env = "SAPM_DEFAULT_PACKAGE_MANAGER")]
     pub package_manager: String,
 
     #[clap(subcommand)]

@@ -47,7 +47,6 @@ impl PackageManager {
         return command;
     }
 
-    // function for mapping the command to the package manager
     fn match_subcommand_to_package_manager(
         package_manager: PackageManager,
         sub_command: SubCommand,

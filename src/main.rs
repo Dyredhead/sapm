@@ -14,6 +14,5 @@ fn main() {
 
     let command = PackageManager::generate_command(package_manager, args.sub_command);
 
-    // println!("{:?}", command);
     PackageManager::execute_command(command);
 }
