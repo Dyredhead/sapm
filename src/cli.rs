@@ -34,7 +34,7 @@ fn get_default_package_manager() -> String {
 
         "sled" | "suse" => "zypper",
 
-        _ => panic!("not implemented"),
+        _ => "",
     };
     return String::from(default_package_manager);
 }
