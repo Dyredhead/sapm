@@ -1,6 +1,6 @@
 use crate::utils::combine_vectors;
 
-use std::process::Command;
+use std::{path::PathBuf, process::Command};
 
 use clap::Subcommand;
 use serde::{Deserialize, Serialize};
@@ -75,10 +75,14 @@ impl PackageManager {
 
     // TODO: maybe use another format for the package manager config that is not json
     pub fn from_name(name: &str) -> Option<Self> {
-        for data_dir in xdg::BaseDirectories::get_data_dirs(
-            &xdg::BaseDirectories::with_prefix("sapm/package_managers").unwrap(),
-        ) {
-            if let Ok(package_managers) = std::fs::read_dir(data_dir) {
+        let directories = [
+            xdg::BaseDirectories::get_config_home(
+                &xdg::BaseDirectories::with_prefix("sapm/package_managers").unwrap(),
+            ),
+            PathBuf::from("/etc/sapm"),
+        ];
+        for directory in directories {
+            if let Ok(package_managers) = std::fs::read_dir(directory) {
                 for package_manager in package_managers {
                     let package_manager = package_manager.unwrap();
                     if package_manager.file_name() == (name.to_string() + ".json").as_str() {
