@@ -6,5 +6,5 @@
 	"install": ["install"],
 	"list": ["list"],
 	"uninstall": ["remove"],
-	"update": ["update"],
+	"update": ["update"]
 }
