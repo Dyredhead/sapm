@@ -1,25 +1,11 @@
 # https://gist.github.com/jlgerber/0f280236c2ee1b741dfe41a38d39a467
 prog :=sapm
 
-debug ?=
+build target/release/$(prog):
+	cargo build --release
 
-$(info debug is $(debug))
-
-ifdef debug
-  release :=
-  target :=debug
-  extension :=debug
-else
-  release :=--release
-  target :=release
-  extension :=
-endif
-
-build:
-	cargo build $(release)
-
-install:
-	cp target/$(target)/$(prog) ~/.local/share/bin/$(prog)-$(extension)
+install: target/release/$(prog)
+	cp --force target/release/$(prog) ~/.local/share/bin/$(prog)
 
 all: build install
  

@@ -79,7 +79,7 @@ impl PackageManager {
             xdg::BaseDirectories::get_config_home(
                 &xdg::BaseDirectories::with_prefix("sapm/package_managers").unwrap(),
             ),
-            PathBuf::from("/etc/sapm"),
+            PathBuf::from("/etc/sapm/package_managers"),
         ];
         for directory in directories {
             if let Ok(package_managers) = std::fs::read_dir(directory) {
@@ -101,7 +101,8 @@ impl PackageManager {
         return None;
     }
     fn from_json(json: &str) -> Option<Self> {
-        let package_manager: PackageManager = serde_json::from_str(json).unwrap();
+        let package_manager: PackageManager =
+            serde_json::from_str(json).expect("Json is incorrectly formatted");
         return Some(package_manager);
     }
 }
