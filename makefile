@@ -5,7 +5,9 @@ build target/release/$(prog):
 	cargo build --release
 
 install: target/release/$(prog)
-	cp --force target/release/$(prog) ~/.local/share/bin/$(prog)
+	cp --force -r target/release/$(prog) ~/.local/share/bin/$(prog)
+	cp --force -r data/config/* ~/.config/sapm/
+	sudo cp --force -r  data/config/* /etc/sapm/
 
 all: build install
  
