@@ -1,17 +1,42 @@
 # https://gist.github.com/jlgerber/0f280236c2ee1b741dfe41a38d39a467
 pkgname :=sapm
 
-all: build install clean
+all: build install
 
 build target/release/$(pkgname):
 	cargo build --release
 
 install: ./target/release/$(pkgname)
+
+	@if [ -f "${XDG_DATA_HOME}/bin/$(pkgname)" ]; then \
+		echo "sapm is already installed, skipping installation"; \
+		echo "if you wish to proceed with the installation please first run make uninstall"; \
+		exit 1; \
+	fi
+
+	mkdir -p "${XDG_DATA_HOME}/bin"
 	cp -a "./target/release/$(pkgname)" "${XDG_DATA_HOME}/bin/$(pkgname)"
 	cp -a "./data/config/"* "${XDG_CONFIG_HOME}/$(pkgname)"
 
-	mkdir -p "${XDG_CONFIG_HOME}/zsh/oh-my-zsh/completions"
-	cp -a ./data/local/completions/_$(pkgname) "${XDG_CONFIG_HOME}/zsh/oh-my-zsh/completions/_$(pkgname)"
+	@if [ -d "${XDG_DATA_HOME}/bash-completion/" ]; then \
+		mkdir -p "${XDG_DATA_HOME}/bash-completion/completions/"; \
+		cp -a ./data/local/completions/$(pkgname).bash "${XDG_DATA_HOME}/bash-completion/$(pkgname)"; \
+	else \
+		echo "Directory: ${XDG_DATA_HOME}/bash-completion/completions/ was not found, skipping Bash completion installation"; \
+	fi
+
+	@if [ -d "${XDG_DATA_HOME}/fish/vendor_completions.d/" ]; then \
+		cp -a ./data/local/completions/$(pkgname).fish "${XDG_DATA_HOME}/fish/vendor_completions.d/$(pkgname).fish"; \
+	else \
+		echo "Directory: ${XDG_DATA_HOME}/fish/vendor_completions.d/ was not found, skipping Fish completion installation"; \
+	fi
+
+	@if [ -d "${XDG_CONFIG_HOME}/zsh/oh-my-zsh/" ]; then \
+		mkdir -p "${XDG_CONFIG_HOME}/zsh/oh-my-zsh/completions"; \
+		cp -a ./data/local/completions/_$(pkgname) "${XDG_CONFIG_HOME}/zsh/oh-my-zsh/completions/_$(pkgname)"; \
+	else \
+		echo "Directory: ${XDG_CONFIG_HOME}/zsh/oh-my-zsh/completions/ was not found, skipping Zsh completion installation"; \
+	fi
 
 	mkdir -p "${XDG_DATA_HOME}/man/man1"
 	cp -a "./data/local/man/"*".1" "${XDG_DATA_HOME}/man/man1/"
@@ -19,11 +44,15 @@ install: ./target/release/$(pkgname)
 uninstall:
 	rm -f "${XDG_DATA_HOME}/bin/$(pkgname)"
 	rm -rf "${XDG_CONFIG_HOME}/$(pkgname)"
+	rm -f "${XDG_DATA_HOME}/bash-completion/completions/$(pkgname)"
+	rm -f "${XDG_DATA_HOME}/fish/vendor_completions.d/$(pkgname).fish"
 	rm -f "${XDG_CONFIG_HOME}/zsh/oh-my-zsh/completions/_$(pkgname)"
 	rm -f "${XDG_DATA_HOME}/man/man1/$(pkgname)"*".1"
 
 clean:
 	cargo clean
+
+purge: uninstall clean
 
 help:
 	@echo "build - build the program"
