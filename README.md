@@ -1,19 +1,32 @@
 # SAPM
 
-A System Agnostic Package Manager (SAPM) for simple, general use cases. Based heavily off of VanillaOS's apx
+A System Agnostic Package Manager (SAPM) which provides basic but useful functionality
 
-https://rust-cli-recommendations.sunshowers.io/handling-arguments.html
+## List Of Supported Package Managers
 
-https://docs.rs/clap/latest/clap/index.html
-
-## List Of Supported Package Managers:
-Package Managers that have a 
+Package Managers that have a configuration file in /etc/sapm/package_managers/
 
 | Package Managers |
-| ---------------- |
-| apt              |
-| dnf              |
-| nix              |
-| portage          |
-| pacman           |
-| zypper           |
+| :--------------: |
+|       dnf        |
+|      pacman      |
+
+## Future Plans:
+(As of 2024-07-07)
+
+In order of decreasing priority:
+
+* Add support for other common Linux package managers: 
+  * apt
+  * nix
+  * portage
+  * zypper
+  * yum
+  * apk
+* Add support for Microsoft and macOS package managers:
+  * winget
+  * homebrew
+* Extend functionality of sapm to include other, less common, functionality
+  * clean
+  * sync
+  * purge
