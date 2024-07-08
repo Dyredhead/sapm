@@ -1,5 +1,3 @@
-use crate::utils::combine_vectors;
-
 use std::{path::PathBuf, process::Command};
 
 use clap::Subcommand;
@@ -7,14 +5,14 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize)]
 pub struct PackageManager {
-    path: std::path::PathBuf,
+    path: String,
 
-    find: Vec<String>,
-    info: Vec<String>,
-    install: Vec<String>,
-    list: Vec<String>,
-    uninstall: Vec<String>,
-    update: Vec<String>,
+    find: String,
+    info: String,
+    install: String,
+    list: String,
+    uninstall: String,
+    update: String,
 }
 #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Subcommand)]
 pub enum SubCommand {
@@ -38,34 +36,37 @@ impl PackageManager {
     }
 
     pub fn generate_command(package_manager: PackageManager, subcommand: SubCommand) -> Command {
-        let mut command = Command::new(&package_manager.path);
-        let args =
-            self::PackageManager::match_subcommand_to_package_manager(package_manager, subcommand);
-        for arg in args {
-            command.arg(arg);
-        }
+        let mut command = Command::new("/usr/bin/sh");
+        let command_string = package_manager.path.to_owned()
+            + " "
+            + &self::PackageManager::match_subcommand_to_package_manager(
+                package_manager,
+                subcommand,
+            );
+
+        command.args(["-c", &command_string]);
         return command;
     }
 
     fn match_subcommand_to_package_manager(
         package_manager: PackageManager,
         sub_command: SubCommand,
-    ) -> Vec<String> {
+    ) -> String {
         match sub_command {
             SubCommand::Find { package } => {
-                return combine_vectors(package_manager.find, vec![package]);
+                return package_manager.find + " " + &package;
             }
             SubCommand::Info { package } => {
-                return combine_vectors(package_manager.info, vec![package]);
+                return package_manager.info + " " + &package;
             }
             SubCommand::Install { packages } => {
-                return combine_vectors(package_manager.install, packages);
+                return package_manager.install + " " + &(packages.join(" "));
             }
             SubCommand::List => {
                 return package_manager.list;
             }
             SubCommand::Uninstall { packages } => {
-                return combine_vectors(package_manager.uninstall, packages);
+                return package_manager.uninstall + " " + &(packages.join(" "));
             }
             SubCommand::Update => {
                 return package_manager.update;
@@ -77,17 +78,7 @@ impl PackageManager {
     // TODO: add vendor_package_managers.d into /usr/share/sapm/ and $XDG_DATA_HOME/sapm/
     pub fn from_name(name: &str) -> Option<Self> {
         let directories = [
-            // For user package manager configurations
-            xdg::BaseDirectories::get_config_home(
-                &xdg::BaseDirectories::with_prefix("sapm/package_managers").unwrap(),
-            ),
-            // For system administrator package manager configurations
             PathBuf::from("/etc/sapm/package_managers"),
-            // For thrid party package manager configurations
-            xdg::BaseDirectories::get_data_home(
-                &xdg::BaseDirectories::with_prefix("sapm/package_managers").unwrap(),
-            ),
-            // For sapm package manager configurations
             PathBuf::from("/usr/share/sapm/package_managers"),
         ];
         for directory in directories {

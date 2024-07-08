@@ -1,0 +1,10 @@
+{
+	"path": "/usr/bin/apt",
+	
+	"find": "search",
+	"info": "show",
+	"install": "install",
+	"list": "list --installed",
+	"uninstall": "remove",
+	"update": "update && /usr/bin/apt upgrade"
+}

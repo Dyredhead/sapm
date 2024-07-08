@@ -3,7 +3,7 @@ pkgname :=sapm
 
 all: build install
 
-build target/release/$(pkgname):
+build ./target/release/$(pkgname):
 	cargo build --release
 
 install: ./target/release/$(pkgname)
@@ -14,8 +14,7 @@ install: ./target/release/$(pkgname)
 		exit 1; \
 	fi
 
-	mkdir -p "${XDG_DATA_HOME}/bin"
-	cp -a "./target/release/$(pkgname)" "${XDG_DATA_HOME}/bin/$(pkgname)"
+	install -Dm755 "./target/release/$(pkgname)" "${XDG_DATA_HOME}/bin/$(pkgname)"
 
 	@if ![ -d "${XDG_CONFIG_HOME}/$(pkgname)" ]; then \
 		mkdir -p "${XDG_CONFIG_HOME}/$(pkgname)"

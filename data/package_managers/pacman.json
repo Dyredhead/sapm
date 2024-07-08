@@ -1,10 +1,10 @@
 {
 	"path": "/usr/bin/pacman",
 	
-	"find": ["--sync", "--search"],
-	"info": ["--sync", "--info"],
-	"install": ["--sync"],
-	"list": ["--query"],
-	"uninstall": ["--remove"],
-	"update": ["--sync", "--refresh", "--sysupgrade"]
+	"find": "--sync --search",
+	"info": "--sync --info",
+	"install": "--sync",
+	"list": "--query",
+	"uninstall": "--remove",
+	"update": "--sync --refresh --sysupgrade"
 }
