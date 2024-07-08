@@ -16,34 +16,42 @@ install: ./target/release/$(pkgname)
 
 	mkdir -p "${XDG_DATA_HOME}/bin"
 	cp -a "./target/release/$(pkgname)" "${XDG_DATA_HOME}/bin/$(pkgname)"
-	cp -a "./data/config/"* "${XDG_CONFIG_HOME}/$(pkgname)"
+
+	@if ![ -d "${XDG_CONFIG_HOME}/$(pkgname)" ]; then \
+		mkdir -p "${XDG_CONFIG_HOME}/$(pkgname)"
+	else \
+		echo "Directory: ${XDG_CONFIG_HOME}/$(pkgname) already exists, skipping configuration installation"; \
+	fi
 
 	@if [ -d "${XDG_DATA_HOME}/bash-completion/" ]; then \
 		mkdir -p "${XDG_DATA_HOME}/bash-completion/completions/"; \
-		cp -a ./data/local/completions/$(pkgname).bash "${XDG_DATA_HOME}/bash-completion/$(pkgname)"; \
+		cp -a ./data/completions/$(pkgname).bash "${XDG_DATA_HOME}/bash-completion/$(pkgname)"; \
 	else \
 		echo "Directory: ${XDG_DATA_HOME}/bash-completion/completions/ was not found, skipping Bash completion installation"; \
 	fi
 
 	@if [ -d "${XDG_DATA_HOME}/fish/vendor_completions.d/" ]; then \
-		cp -a ./data/local/completions/$(pkgname).fish "${XDG_DATA_HOME}/fish/vendor_completions.d/$(pkgname).fish"; \
+		cp -a ./data/completions/$(pkgname).fish "${XDG_DATA_HOME}/fish/vendor_completions.d/$(pkgname).fish"; \
 	else \
 		echo "Directory: ${XDG_DATA_HOME}/fish/vendor_completions.d/ was not found, skipping Fish completion installation"; \
 	fi
 
 	@if [ -d "${XDG_CONFIG_HOME}/zsh/oh-my-zsh/" ]; then \
 		mkdir -p "${XDG_CONFIG_HOME}/zsh/oh-my-zsh/completions"; \
-		cp -a ./data/local/completions/_$(pkgname) "${XDG_CONFIG_HOME}/zsh/oh-my-zsh/completions/_$(pkgname)"; \
+		cp -a ./data/completions/_$(pkgname) "${XDG_CONFIG_HOME}/zsh/oh-my-zsh/completions/_$(pkgname)"; \
 	else \
 		echo "Directory: ${XDG_CONFIG_HOME}/zsh/oh-my-zsh/completions/ was not found, skipping Zsh completion installation"; \
 	fi
 
 	mkdir -p "${XDG_DATA_HOME}/man/man1"
-	cp -a "./data/local/man/"*".1" "${XDG_DATA_HOME}/man/man1/"
+	cp -a "./data/man/"*".1" "${XDG_DATA_HOME}/man/man1/"
+
+	mkdir -p "${XDG_DATA_HOME}/$(pkgname)/package_managers"
+	cp -a "./data/package_managers/"* "${XDG_DATA_HOME}/$(pkgname)/package_managers"
 
 uninstall:
 	rm -f "${XDG_DATA_HOME}/bin/$(pkgname)"
-	rm -rf "${XDG_CONFIG_HOME}/$(pkgname)"
+	rm -rf "${XDG_DATA_HOME}/$(pkgname)/"*
 	rm -f "${XDG_DATA_HOME}/bash-completion/completions/$(pkgname)"
 	rm -f "${XDG_DATA_HOME}/fish/vendor_completions.d/$(pkgname).fish"
 	rm -f "${XDG_CONFIG_HOME}/zsh/oh-my-zsh/completions/_$(pkgname)"
@@ -53,9 +61,16 @@ clean:
 	cargo clean
 
 purge: uninstall clean
+	rm -rf "${XDG_CONFIG_HOME}/$(pkgname)/"*
 
 help:
-	@echo "build - build the program"
-	@echo "install - install the program"
-	@echo "all - build and install the program"
-	@echo "help - print this message"
+	@echo "Usage: make [target]"
+	@echo ""
+	@echo "Targets:"
+	@echo "  all        Build and install the program"
+	@echo "  build      Build the program"
+	@echo "  install    Install the program"
+	@echo "  uninstall  Uninstall the program"
+	@echo "  clean      Clean the build directory"
+	@echo "  purge      Uninstall the program and its configuration and clean the build directory"
+	@echo "  help       Display this help message"

@@ -6,7 +6,7 @@ use os_release;
 #[clap(author = "Dyredhead", version, about, long_about = None, arg_required_else_help = true)]
 pub struct Cli {
     /// Use the specified package manager instead of the default
-    #[clap(long, default_value_t = get_default_package_manager(), env = "SAPM_DEFAULT_PACKAGE_MANAGER")]
+    #[clap(long = "package-manager", default_value_t = get_default_package_manager(), env = "SAPM_DEFAULT_PACKAGE_MANAGER")]
     pub package_manager: String,
 
     #[clap(subcommand)]

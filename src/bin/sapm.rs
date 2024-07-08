@@ -6,6 +6,8 @@ use sapm::modules::package_manager;
 fn main() {
     let args = cli::Cli::parse();
 
+    // parse sapm.conf
+
     let package_manager = package_manager::PackageManager::from_name(&args.package_manager)
         .expect("No such package manager");
 

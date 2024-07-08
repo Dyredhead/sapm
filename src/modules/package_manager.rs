@@ -74,12 +74,21 @@ impl PackageManager {
     }
 
     // TODO: maybe use another format for the package manager config that is not json
+    // TODO: add vendor_package_managers.d into /usr/share/sapm/ and $XDG_DATA_HOME/sapm/
     pub fn from_name(name: &str) -> Option<Self> {
         let directories = [
+            // For user package manager configurations
             xdg::BaseDirectories::get_config_home(
                 &xdg::BaseDirectories::with_prefix("sapm/package_managers").unwrap(),
             ),
+            // For system administrator package manager configurations
             PathBuf::from("/etc/sapm/package_managers"),
+            // For thrid party package manager configurations
+            xdg::BaseDirectories::get_data_home(
+                &xdg::BaseDirectories::with_prefix("sapm/package_managers").unwrap(),
+            ),
+            // For sapm package manager configurations
+            PathBuf::from("/usr/share/sapm/package_managers"),
         ];
         for directory in directories {
             if let Ok(package_managers) = std::fs::read_dir(directory) {
