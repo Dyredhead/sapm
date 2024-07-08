@@ -6,8 +6,12 @@ use os_release;
 #[clap(author = "Dyredhead", version, about, long_about = None, arg_required_else_help = true)]
 pub struct Cli {
     /// Use the specified package manager instead of the default
-    #[clap(long = "package-manager", default_value_t = get_default_package_manager(), env = "SAPM_DEFAULT_PACKAGE_MANAGER")]
+    #[clap(long = "package-manager", default_value_t = get_default_package_manager(), env = "SAPM_DEFAULT_PACKAGE_MANAGER", visible_alias = "pm")]
     pub package_manager: String,
+
+    /// Show the command that SAPM will execute
+    #[clap(long = "verbose", short = 'v')]
+    pub verbose: bool,
 
     #[clap(subcommand)]
     pub sub_command: package_manager::SubCommand,

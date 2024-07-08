@@ -1,0 +1,8 @@
+{	
+	"find": "dnf search",
+	"info": "dnf info",
+	"install": "sudo dnf install",
+	"list": "dnf list",
+	"uninstall": "sudo dnf remove",
+	"update": "sudo dnf update"
+}

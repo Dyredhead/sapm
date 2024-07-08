@@ -1,0 +1,8 @@
+{	
+	"find": "pacman --sync --search",
+	"info": "pacman --sync --info",
+	"install": "sudo pacman --sync",
+	"list": "pacman --query",
+	"uninstall": "sudo pacman --remove",
+	"update": "sudo pacman --sync --refresh --sysupgrade"
+}

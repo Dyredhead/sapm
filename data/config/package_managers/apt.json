@@ -1,0 +1,8 @@
+{	
+	"find": "apt search",
+	"info": "apt show",
+	"install": "sudo apt install",
+	"list": " list --installed",
+	"uninstall": "sudo apt remove",
+	"update": "sudo apt update && sudo apt upgrade"
+}

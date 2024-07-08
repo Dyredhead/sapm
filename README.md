@@ -12,6 +12,7 @@ Package Managers that have a configuration file in /etc/sapm/package_managers/
 
 | Package Managers |
 | :--------------: |
+|       apt        |
 |       dnf        |
 |      pacman      |
 

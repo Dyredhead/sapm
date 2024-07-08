@@ -5,8 +5,6 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize)]
 pub struct PackageManager {
-    path: String,
-
     find: String,
     info: String,
     install: String,
@@ -31,24 +29,15 @@ pub enum SubCommand {
 }
 
 impl PackageManager {
-    pub fn execute_command(mut command: Command) {
-        command.status().expect("failed to execute process");
+    pub fn execute_command(command_string: &str) {
+        Command::new("sh")
+            .arg("-c")
+            .arg(command_string)
+            .status()
+            .expect("failed to execute process");
     }
 
-    pub fn generate_command(package_manager: PackageManager, subcommand: SubCommand) -> Command {
-        let mut command = Command::new("/usr/bin/sh");
-        let command_string = package_manager.path.to_owned()
-            + " "
-            + &self::PackageManager::match_subcommand_to_package_manager(
-                package_manager,
-                subcommand,
-            );
-
-        command.args(["-c", &command_string]);
-        return command;
-    }
-
-    fn match_subcommand_to_package_manager(
+    pub fn match_subcommand_to_package_manager(
         package_manager: PackageManager,
         sub_command: SubCommand,
     ) -> String {
