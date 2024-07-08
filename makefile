@@ -5,6 +5,8 @@ all: build install
 
 build ./target/release/$(pkgname):
 	cargo build --release
+	./target/release/man
+	./target/release/completions
 
 install: ./target/release/$(pkgname)
 
