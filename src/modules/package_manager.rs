@@ -12,6 +12,7 @@ pub struct PackageManager {
     uninstall: String,
     update: String,
 }
+
 #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Subcommand)]
 pub enum SubCommand {
     /// Find the specified package
@@ -37,7 +38,7 @@ impl PackageManager {
             .expect("failed to execute process");
     }
 
-    pub fn match_subcommand_to_package_manager(
+    pub fn match_sapm_subcommand_to_package_manager_command_string(
         package_manager: PackageManager,
         sub_command: SubCommand,
     ) -> String {
@@ -64,11 +65,11 @@ impl PackageManager {
     }
 
     // TODO: maybe use another format for the package manager config that is not json
-    // TODO: add vendor_package_managers.d into /usr/share/sapm/ and $XDG_DATA_HOME/sapm/
     pub fn from_name(name: &str) -> Option<Self> {
         let directories = [
             PathBuf::from("/etc/sapm/package_managers"),
             PathBuf::from("/usr/share/sapm/package_managers"),
+            PathBuf::from("/usr/share/sapm/vendor_package_managers.d"),
         ];
         for directory in directories {
             if let Ok(package_managers) = std::fs::read_dir(directory) {

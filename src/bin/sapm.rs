@@ -12,10 +12,11 @@ fn main() {
     let package_manager = package_manager::PackageManager::from_name(&args.package_manager)
         .expect("No such package manager");
 
-    let command_string = package_manager::PackageManager::match_subcommand_to_package_manager(
-        package_manager,
-        args.sub_command,
-    );
+    let command_string =
+        package_manager::PackageManager::match_sapm_subcommand_to_package_manager_command_string(
+            package_manager,
+            args.sub_command,
+        );
 
     if args.verbose {
         println!(
@@ -25,5 +26,6 @@ fn main() {
             &command_string.yellow(),
         );
     }
+
     package_manager::PackageManager::execute_command(&command_string);
 }
