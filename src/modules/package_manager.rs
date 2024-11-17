@@ -1,41 +1,26 @@
-use std::{path::PathBuf, process::Command};
+use std::{
+    io,
+    path::PathBuf,
+    process::{Command, ExitStatus},
+};
 
-use clap::Subcommand;
 use serde::{Deserialize, Serialize};
+
+use crate::cli::SubCommand;
 
 #[derive(Deserialize, Serialize)]
 pub struct PackageManager {
-    find: String,
     info: String,
     install: String,
     list: String,
+    search: String,
     uninstall: String,
     update: String,
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Subcommand)]
-pub enum SubCommand {
-    /// Find the specified package
-    Find { package: String },
-    /// Get information about the specified package
-    Info { package: String },
-    /// Install the specified package(s)
-    Install { packages: Vec<String> },
-    /// List all of the installed packages
-    List,
-    /// Uninstall the specified package(s)
-    Uninstall { packages: Vec<String> },
-    /// Update all packages
-    Update,
-}
-
 impl PackageManager {
-    pub fn execute_command(command_string: &str) {
-        Command::new("sh")
-            .arg("-c")
-            .arg(command_string)
-            .status()
-            .expect("failed to execute process");
+    pub fn execute_command(command_string: &str) -> io::Result<ExitStatus> {
+        return Command::new("sh").arg("-c").arg(command_string).status();
     }
 
     pub fn match_sapm_subcommand_to_package_manager_command_string(
@@ -43,9 +28,6 @@ impl PackageManager {
         sub_command: SubCommand,
     ) -> String {
         match sub_command {
-            SubCommand::Find { package } => {
-                return package_manager.find + " " + &package;
-            }
             SubCommand::Info { package } => {
                 return package_manager.info + " " + &package;
             }
@@ -54,6 +36,9 @@ impl PackageManager {
             }
             SubCommand::List => {
                 return package_manager.list;
+            }
+            SubCommand::Search { package } => {
+                return package_manager.search + " " + &package;
             }
             SubCommand::Uninstall { packages } => {
                 return package_manager.uninstall + " " + &(packages.join(" "));

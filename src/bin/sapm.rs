@@ -1,10 +1,12 @@
+use std::process::ExitCode;
+
 use clap::Parser;
 
 use colored::Colorize;
 use sapm::modules::cli;
 use sapm::modules::package_manager;
 
-fn main() {
+fn main() -> ExitCode {
     let args = cli::Cli::parse();
 
     // parse sapm.conf
@@ -20,12 +22,36 @@ fn main() {
 
     if args.verbose {
         println!(
-            "{} {} `{}`\n",
+            "{} {}: `{}`\n",
             "[INFO]".green().bold(),
-            "SAPM will execute:".white().bold(),
+            "SAPM will execute".white().bold(),
             &command_string.yellow(),
         );
     }
 
-    package_manager::PackageManager::execute_command(&command_string);
+    let status = package_manager::PackageManager::execute_command(&command_string).unwrap();
+
+    if args.verbose {
+        if status.success() {
+            println!(
+                "{} {}: `{}`",
+                "[INFO]".green().bold(),
+                "SAPM Sucessfully executed".white().bold(),
+                &command_string.yellow(),
+            );
+        } else {
+            println!(
+                "\n{} {}: `{}`",
+                "[ERROR]".red().bold(),
+                "SAPM failed to execute".white().bold(),
+                &command_string.yellow(),
+            );
+        }
+    }
+
+    if status.success() {
+        return ExitCode::SUCCESS;
+    } else {
+        return ExitCode::FAILURE;
+    }
 }
