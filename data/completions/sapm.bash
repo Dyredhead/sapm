@@ -16,7 +16,7 @@ _sapm() {
                 cmd="sapm__install"
                 ;;
             sapm,find)
-                cmd="sapm__find"
+                cmd="sapm__search"
                 ;;
             sapm,help)
                 cmd="sapm__help"
@@ -37,7 +37,7 @@ _sapm() {
                 cmd="sapm__uninstall"
                 ;;
             sapm,search)
-                cmd="sapm__find"
+                cmd="sapm__search"
                 ;;
             sapm,show)
                 cmd="sapm__info"
@@ -51,9 +51,6 @@ _sapm() {
             sapm,upgrade)
                 cmd="sapm__update"
                 ;;
-            sapm__help,find)
-                cmd="sapm__help__find"
-                ;;
             sapm__help,help)
                 cmd="sapm__help__help"
                 ;;
@@ -65,6 +62,9 @@ _sapm() {
                 ;;
             sapm__help,list)
                 cmd="sapm__help__list"
+                ;;
+            sapm__help,search)
+                cmd="sapm__help__search"
                 ;;
             sapm__help,uninstall)
                 cmd="sapm__help__uninstall"
@@ -79,7 +79,7 @@ _sapm() {
 
     case "${cmd}" in
         sapm)
-            opts="-v -h -V --pm --package-manager --verbose --help --version find search info show install add list ls uninstall remove update upgrade help"
+            opts="-v -h -V --pm --package-manager --verbose --help --version info show install add list ls search find uninstall remove update upgrade help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 1 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0
@@ -100,51 +100,9 @@ _sapm() {
             COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
             return 0
             ;;
-        sapm__find)
-            opts="-h --help <PACKAGE>"
-            if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]] ; then
-                COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
-                return 0
-            fi
-            case "${prev}" in
-                *)
-                    COMPREPLY=()
-                    ;;
-            esac
-            COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
-            return 0
-            ;;
-        sapm__find)
-            opts="-h --help <PACKAGE>"
-            if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]] ; then
-                COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
-                return 0
-            fi
-            case "${prev}" in
-                *)
-                    COMPREPLY=()
-                    ;;
-            esac
-            COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
-            return 0
-            ;;
         sapm__help)
-            opts="find info install list uninstall update help"
+            opts="info install list search uninstall update help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]] ; then
-                COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
-                return 0
-            fi
-            case "${prev}" in
-                *)
-                    COMPREPLY=()
-                    ;;
-            esac
-            COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
-            return 0
-            ;;
-        sapm__help__find)
-            opts=""
-            if [[ ${cur} == -* || ${COMP_CWORD} -eq 3 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0
             fi
@@ -199,6 +157,20 @@ _sapm() {
             return 0
             ;;
         sapm__help__list)
+            opts=""
+            if [[ ${cur} == -* || ${COMP_CWORD} -eq 3 ]] ; then
+                COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
+                return 0
+            fi
+            case "${prev}" in
+                *)
+                    COMPREPLY=()
+                    ;;
+            esac
+            COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
+            return 0
+            ;;
+        sapm__help__search)
             opts=""
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 3 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
@@ -312,6 +284,34 @@ _sapm() {
             ;;
         sapm__list)
             opts="-h --help"
+            if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]] ; then
+                COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
+                return 0
+            fi
+            case "${prev}" in
+                *)
+                    COMPREPLY=()
+                    ;;
+            esac
+            COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
+            return 0
+            ;;
+        sapm__search)
+            opts="-h --help <PACKAGE>"
+            if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]] ; then
+                COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
+                return 0
+            fi
+            case "${prev}" in
+                *)
+                    COMPREPLY=()
+                    ;;
+            esac
+            COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
+            return 0
+            ;;
+        sapm__search)
+            opts="-h --help <PACKAGE>"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0

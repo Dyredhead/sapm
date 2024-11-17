@@ -82,7 +82,7 @@ fn get_aliases_of(sub_command: SubCommand) -> Vec<&'static str> {
         SubCommand::Info { package: _ } => vec!["show"],
         SubCommand::Install { packages: _ } => vec!["add"],
         SubCommand::List {} => vec!["ls"],
-        SubCommand::Search { package: _ } => vec!["search"],
+        SubCommand::Search { package: _ } => vec!["find"],
         SubCommand::Uninstall { packages: _ } => vec!["remove"],
         SubCommand::Update {} => vec!["upgrade"],
     };

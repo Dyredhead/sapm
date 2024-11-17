@@ -32,21 +32,7 @@ _sapm() {
         (( CURRENT += 1 ))
         curcontext="${curcontext%:*:*}:sapm-command-$line[1]:"
         case $line[1] in
-            (find)
-_arguments "${_arguments_options[@]}" : \
-'-h[Print help]' \
-'--help[Print help]' \
-':package:' \
-&& ret=0
-;;
-(search)
-_arguments "${_arguments_options[@]}" : \
-'-h[Print help]' \
-'--help[Print help]' \
-':package:' \
-&& ret=0
-;;
-(info)
+            (info)
 _arguments "${_arguments_options[@]}" : \
 '-h[Print help]' \
 '--help[Print help]' \
@@ -84,6 +70,20 @@ _arguments "${_arguments_options[@]}" : \
 _arguments "${_arguments_options[@]}" : \
 '-h[Print help]' \
 '--help[Print help]' \
+&& ret=0
+;;
+(search)
+_arguments "${_arguments_options[@]}" : \
+'-h[Print help]' \
+'--help[Print help]' \
+':package:' \
+&& ret=0
+;;
+(find)
+_arguments "${_arguments_options[@]}" : \
+'-h[Print help]' \
+'--help[Print help]' \
+':package:' \
 && ret=0
 ;;
 (uninstall)
@@ -124,11 +124,7 @@ _arguments "${_arguments_options[@]}" : \
         (( CURRENT += 1 ))
         curcontext="${curcontext%:*:*}:sapm-help-command-$line[1]:"
         case $line[1] in
-            (find)
-_arguments "${_arguments_options[@]}" : \
-&& ret=0
-;;
-(info)
+            (info)
 _arguments "${_arguments_options[@]}" : \
 && ret=0
 ;;
@@ -137,6 +133,10 @@ _arguments "${_arguments_options[@]}" : \
 && ret=0
 ;;
 (list)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(search)
 _arguments "${_arguments_options[@]}" : \
 && ret=0
 ;;
@@ -164,14 +164,14 @@ esac
 (( $+functions[_sapm_commands] )) ||
 _sapm_commands() {
     local commands; commands=(
-'find:Find the specified package' \
-'search:Find the specified package' \
 'info:Get information about the specified package' \
 'show:Get information about the specified package' \
 'install:Install the specified package(s)' \
 'add:Install the specified package(s)' \
 'list:List all of the installed packages' \
 'ls:List all of the installed packages' \
+'search:Search for the specified package' \
+'find:Search for the specified package' \
 'uninstall:Uninstall the specified package(s)' \
 'remove:Uninstall the specified package(s)' \
 'update:Update all packages' \
@@ -180,28 +180,18 @@ _sapm_commands() {
     )
     _describe -t commands 'sapm commands' commands "$@"
 }
-(( $+functions[_sapm__find_commands] )) ||
-_sapm__find_commands() {
-    local commands; commands=()
-    _describe -t commands 'sapm find commands' commands "$@"
-}
 (( $+functions[_sapm__help_commands] )) ||
 _sapm__help_commands() {
     local commands; commands=(
-'find:Find the specified package' \
 'info:Get information about the specified package' \
 'install:Install the specified package(s)' \
 'list:List all of the installed packages' \
+'search:Search for the specified package' \
 'uninstall:Uninstall the specified package(s)' \
 'update:Update all packages' \
 'help:Print this message or the help of the given subcommand(s)' \
     )
     _describe -t commands 'sapm help commands' commands "$@"
-}
-(( $+functions[_sapm__help__find_commands] )) ||
-_sapm__help__find_commands() {
-    local commands; commands=()
-    _describe -t commands 'sapm help find commands' commands "$@"
 }
 (( $+functions[_sapm__help__help_commands] )) ||
 _sapm__help__help_commands() {
@@ -222,6 +212,11 @@ _sapm__help__install_commands() {
 _sapm__help__list_commands() {
     local commands; commands=()
     _describe -t commands 'sapm help list commands' commands "$@"
+}
+(( $+functions[_sapm__help__search_commands] )) ||
+_sapm__help__search_commands() {
+    local commands; commands=()
+    _describe -t commands 'sapm help search commands' commands "$@"
 }
 (( $+functions[_sapm__help__uninstall_commands] )) ||
 _sapm__help__uninstall_commands() {
@@ -247,6 +242,11 @@ _sapm__install_commands() {
 _sapm__list_commands() {
     local commands; commands=()
     _describe -t commands 'sapm list commands' commands "$@"
+}
+(( $+functions[_sapm__search_commands] )) ||
+_sapm__search_commands() {
+    local commands; commands=()
+    _describe -t commands 'sapm search commands' commands "$@"
 }
 (( $+functions[_sapm__uninstall_commands] )) ||
 _sapm__uninstall_commands() {

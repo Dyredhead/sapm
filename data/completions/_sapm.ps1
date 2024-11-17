@@ -29,29 +29,19 @@ Register-ArgumentCompleter -Native -CommandName 'sapm' -ScriptBlock {
             [CompletionResult]::new('--help', 'help', [CompletionResultType]::ParameterName, 'Print help')
             [CompletionResult]::new('-V', 'V ', [CompletionResultType]::ParameterName, 'Print version')
             [CompletionResult]::new('--version', 'version', [CompletionResultType]::ParameterName, 'Print version')
-            [CompletionResult]::new('find', 'find', [CompletionResultType]::ParameterValue, 'Find the specified package')
-            [CompletionResult]::new('search', 'search', [CompletionResultType]::ParameterValue, 'Find the specified package')
             [CompletionResult]::new('info', 'info', [CompletionResultType]::ParameterValue, 'Get information about the specified package')
             [CompletionResult]::new('show', 'show', [CompletionResultType]::ParameterValue, 'Get information about the specified package')
             [CompletionResult]::new('install', 'install', [CompletionResultType]::ParameterValue, 'Install the specified package(s)')
             [CompletionResult]::new('add', 'add', [CompletionResultType]::ParameterValue, 'Install the specified package(s)')
             [CompletionResult]::new('list', 'list', [CompletionResultType]::ParameterValue, 'List all of the installed packages')
             [CompletionResult]::new('ls', 'ls', [CompletionResultType]::ParameterValue, 'List all of the installed packages')
+            [CompletionResult]::new('search', 'search', [CompletionResultType]::ParameterValue, 'Search for the specified package')
+            [CompletionResult]::new('find', 'find', [CompletionResultType]::ParameterValue, 'Search for the specified package')
             [CompletionResult]::new('uninstall', 'uninstall', [CompletionResultType]::ParameterValue, 'Uninstall the specified package(s)')
             [CompletionResult]::new('remove', 'remove', [CompletionResultType]::ParameterValue, 'Uninstall the specified package(s)')
             [CompletionResult]::new('update', 'update', [CompletionResultType]::ParameterValue, 'Update all packages')
             [CompletionResult]::new('upgrade', 'upgrade', [CompletionResultType]::ParameterValue, 'Update all packages')
             [CompletionResult]::new('help', 'help', [CompletionResultType]::ParameterValue, 'Print this message or the help of the given subcommand(s)')
-            break
-        }
-        'sapm;find' {
-            [CompletionResult]::new('-h', 'h', [CompletionResultType]::ParameterName, 'Print help')
-            [CompletionResult]::new('--help', 'help', [CompletionResultType]::ParameterName, 'Print help')
-            break
-        }
-        'sapm;search' {
-            [CompletionResult]::new('-h', 'h', [CompletionResultType]::ParameterName, 'Print help')
-            [CompletionResult]::new('--help', 'help', [CompletionResultType]::ParameterName, 'Print help')
             break
         }
         'sapm;info' {
@@ -84,6 +74,16 @@ Register-ArgumentCompleter -Native -CommandName 'sapm' -ScriptBlock {
             [CompletionResult]::new('--help', 'help', [CompletionResultType]::ParameterName, 'Print help')
             break
         }
+        'sapm;search' {
+            [CompletionResult]::new('-h', 'h', [CompletionResultType]::ParameterName, 'Print help')
+            [CompletionResult]::new('--help', 'help', [CompletionResultType]::ParameterName, 'Print help')
+            break
+        }
+        'sapm;find' {
+            [CompletionResult]::new('-h', 'h', [CompletionResultType]::ParameterName, 'Print help')
+            [CompletionResult]::new('--help', 'help', [CompletionResultType]::ParameterName, 'Print help')
+            break
+        }
         'sapm;uninstall' {
             [CompletionResult]::new('-h', 'h', [CompletionResultType]::ParameterName, 'Print help')
             [CompletionResult]::new('--help', 'help', [CompletionResultType]::ParameterName, 'Print help')
@@ -105,16 +105,13 @@ Register-ArgumentCompleter -Native -CommandName 'sapm' -ScriptBlock {
             break
         }
         'sapm;help' {
-            [CompletionResult]::new('find', 'find', [CompletionResultType]::ParameterValue, 'Find the specified package')
             [CompletionResult]::new('info', 'info', [CompletionResultType]::ParameterValue, 'Get information about the specified package')
             [CompletionResult]::new('install', 'install', [CompletionResultType]::ParameterValue, 'Install the specified package(s)')
             [CompletionResult]::new('list', 'list', [CompletionResultType]::ParameterValue, 'List all of the installed packages')
+            [CompletionResult]::new('search', 'search', [CompletionResultType]::ParameterValue, 'Search for the specified package')
             [CompletionResult]::new('uninstall', 'uninstall', [CompletionResultType]::ParameterValue, 'Uninstall the specified package(s)')
             [CompletionResult]::new('update', 'update', [CompletionResultType]::ParameterValue, 'Update all packages')
             [CompletionResult]::new('help', 'help', [CompletionResultType]::ParameterValue, 'Print this message or the help of the given subcommand(s)')
-            break
-        }
-        'sapm;help;find' {
             break
         }
         'sapm;help;info' {
@@ -124,6 +121,9 @@ Register-ArgumentCompleter -Native -CommandName 'sapm' -ScriptBlock {
             break
         }
         'sapm;help;list' {
+            break
+        }
+        'sapm;help;search' {
             break
         }
         'sapm;help;uninstall' {
