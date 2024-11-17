@@ -14,22 +14,21 @@ Package Managers that have a configuration file in /etc/sapm/package_managers/
 | :--------------: |
 |       apt        |
 |       dnf        |
+|      flatpak     |
 |      pacman      |
 
 ## Future Plans:
-(As of 2024-07-08)
+(As of 2024-11-16)
 
 In order of decreasing priority:
 
 * Add support for other common Linux Distro package managers: 
-  * apt
   * nix
   * portage
   * zypper
   * yum
   * apk
 * Add support for other common Linux, non-distro specific, package managers:
-  * flatpak
   * snap
 * Add support for Microsoft and macOS package managers:
   * winget
