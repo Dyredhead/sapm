@@ -1,0 +1,8 @@
+{	
+	"info": "flatpak info",
+	"install": "flatpak install",
+	"list": "flatpak list",
+	"search": "flatpak search",
+	"uninstall": "flatpak uninstall",
+	"update": "flatpak update"
+}

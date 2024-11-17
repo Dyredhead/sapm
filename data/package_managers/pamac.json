@@ -1,0 +1,8 @@
+{	
+	"info": "pamac info",
+	"install": "pamac install",
+	"list": "pamac list",
+	"search": "pamac search",
+	"uninstall": "pamac remove",
+	"update": "pamac update"
+}
