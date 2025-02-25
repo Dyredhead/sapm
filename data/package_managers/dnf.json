@@ -1,7 +1,7 @@
 {	
 	"info": "dnf info",
 	"install": "sudo dnf install",
-	"list": "dnf list",
+	"list": "dnf list --installed",
 	"search": "dnf search",
 	"uninstall": "sudo dnf remove",
 	"update": "sudo dnf update"

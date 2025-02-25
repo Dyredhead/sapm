@@ -51,12 +51,12 @@ impl PackageManager {
 
     // TODO: maybe use another format for the package manager config that is not json
     pub fn from_name(name: &str) -> Option<Self> {
-        let directories = [
+        let package_manager_directories = [
             PathBuf::from("/etc/sapm/package_managers"),
             PathBuf::from("/usr/share/sapm/package_managers"),
             PathBuf::from("/usr/share/sapm/vendor_package_managers.d"),
         ];
-        for directory in directories {
+        for directory in package_manager_directories {
             if let Ok(package_managers) = std::fs::read_dir(directory) {
                 for package_manager in package_managers {
                     let package_manager = package_manager.unwrap();
@@ -77,7 +77,7 @@ impl PackageManager {
     }
     fn from_json(json: &str) -> Option<Self> {
         let package_manager: PackageManager =
-            serde_json::from_str(json).expect("Json is incorrectly formatted");
+            serde_json::from_str(json).expect(&format!("{json} is incorrectly formatted"));
         return Some(package_manager);
     }
 }

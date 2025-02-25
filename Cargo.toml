@@ -11,6 +11,7 @@ colored = "2.1.0"
 os-release = "0.1.0"
 serde = { version = "1.0.203", features = ["derive"] }
 serde_json = "1.0.117"
+toml = "0.8.20"
 
 [[bin]]
 name = "sapm"

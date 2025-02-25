@@ -1,23 +1,59 @@
+use std::fs;
+use std::path::PathBuf;
 use std::process::ExitCode;
 
 use clap::Parser;
 
 use colored::Colorize;
+use sapm::cli::{Config, Label, Message, SubCommand};
 use sapm::modules::cli;
 use sapm::modules::package_manager;
 
 fn main() -> ExitCode {
-    let args = cli::Cli::parse();
+    let mut args = cli::Cli::parse();
 
-    // parse sapm.conf
+    let config = toml::from_str::<Config>(
+        &fs::read_to_string(PathBuf::from("/etc/sapm/conf.toml")).unwrap(),
+    )
+    .unwrap();
 
-    let package_manager = package_manager::PackageManager::from_name(&args.package_manager)
-        .expect("No such package manager");
+    if args.package_manager == "all" && args.sub_command == SubCommand::Update {
+        if let Some(all_package_managers) {
+
+        } else {
+            
+        }
+        for package_manager in config.all_package_managers {
+            args.package_manager = package_manager.to_string();
+            if args.dry_run {
+                print_cmd(&args)
+            } else {
+                run_cmd(&args);
+            }
+        }
+    } else {
+        if args.dry_run {
+            print_cmd(&args)
+        } else {
+            run_cmd(&args);
+        }
+    }
+    return ExitCode::SUCCESS;
+}
+
+fn run_cmd(args: &cli::Cli) -> ExitCode {
+    let package_manager =
+        package_manager::PackageManager::from_name(&args.package_manager).expect(&format!(
+            "{} {}: {}",
+            "[ERROR]".red().bold(),
+            "No such package manager".white().bold(),
+            &args.package_manager.yellow(),
+        ));
 
     let command_string =
         package_manager::PackageManager::match_sapm_subcommand_to_package_manager_command_string(
             package_manager,
-            args.sub_command,
+            args.sub_command.clone(),
         );
 
     if args.verbose {
@@ -48,10 +84,29 @@ fn main() -> ExitCode {
             );
         }
     }
-
     if status.success() {
         return ExitCode::SUCCESS;
     } else {
         return ExitCode::FAILURE;
     }
+}
+
+fn print_cmd(args: &cli::Cli) {
+    Message::Error("No such package manager", &args.package_manager);
+    let package_manager =
+        package_manager::PackageManager::from_name(&args.package_manager).expect(&format!(
+            "{} {}: {}",
+            "[ERROR]".red().bold(),
+            "No such package manager".white().bold(),
+            &args.package_manager.yellow(),
+        ));
+
+    let command_string =
+        package_manager::PackageManager::match_sapm_subcommand_to_package_manager_command_string(
+            package_manager,
+            args.sub_command.clone(),
+        );
+    
+    let str = Message(Label::Info, "SAPM will execute", &command_string);
+    println!("{}", );
 }
