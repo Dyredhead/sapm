@@ -35,15 +35,15 @@ pub struct Cli {
     pub sub_command: SubCommand,
 }
 
-/// Attempts to get `default_package_manager` from :
-/// 1. `conf.toml`
-/// 3. `env`
-/// 4. huersitics
+/// Attempts to get `default_package_manager` from:
+/// 1. `env`
+/// 2. `conf.toml`
+/// 3. huersitics
 fn get_default_package_manager() -> String {
     let config = Config::parse();
-    if let Some(default_package_manager) = config.default_package_manager {
+    if let Ok(default_package_manager) = env::var("SAPM_DEFAULT_PACKAGE_MANAGER") {
         return default_package_manager;
-    } else if let Ok(default_package_manager) = env::var("SAPM_DEFAULT_PACKAGE_MANAGER") {
+    } else if let Some(default_package_manager) = config.default_package_manager {
         return default_package_manager;
     } else {
         let os_release = os_release::OsRelease::new().unwrap();
@@ -125,13 +125,14 @@ impl Config {
         };
     }
 
-    /// Attempts to parse `conf.toml` from:
-    /// 1. `$XDG_CONFIG_HOME/sapm/conf.toml`
-    /// 2. `/etc/sapm/conf.toml`
-    /// 3. `env` todo()!
+    /// Parses `conf.toml` from:
+    /// 1. `env`
+    /// 2. `$XDG_CONFIG_HOME/sapm/conf.toml`
+    /// 3. `/etc/sapm/conf.toml`
     /// 4. `/usr/share/sapm/conf.toml` (it is assumed that this always exist)
     pub fn parse() -> Self {
         let config_files = [
+            PathBuf::from(env::var("SAPM_CONFIG_PATH").unwrap_or_default()),
             dirs::config_dir().unwrap().join("sapm/conf.toml"),
             PathBuf::from("/etc/sapm/conf.toml"),
             PathBuf::from("/usr/share/sapm/conf.toml"),
