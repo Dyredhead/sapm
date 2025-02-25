@@ -52,6 +52,7 @@ impl PackageManager {
     // TODO: maybe use another format for the package manager config that is not json
     pub fn from_name(name: &str) -> Option<Self> {
         let package_manager_directories = [
+            // PathBuf::from("$XDG_DATA_HOME/sapm/package_managers"),
             PathBuf::from("/etc/sapm/package_managers"),
             PathBuf::from("/usr/share/sapm/package_managers"),
             PathBuf::from("/usr/share/sapm/vendor_package_managers.d"),

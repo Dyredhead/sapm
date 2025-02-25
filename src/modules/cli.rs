@@ -1,5 +1,7 @@
 use std::{
+    env,
     fmt::{self, Display},
+    path::PathBuf,
     vec,
 };
 
@@ -7,7 +9,6 @@ use clap::{Parser, Subcommand};
 use colored::Colorize;
 use os_release;
 use serde::{Deserialize, Serialize};
-use serde_json::to_string;
 
 #[derive(Parser, Debug)]
 #[clap(
@@ -34,36 +35,41 @@ pub struct Cli {
     pub sub_command: SubCommand,
 }
 
-/// Attempts to get default_package_manager from :
-/// 1.
-///
-/// First tries to read `default_package_manager` from the conf.toml
-///
-/// Second tries to read  
+/// Attempts to get `default_package_manager` from :
+/// 1. `conf.toml`
+/// 3. `env`
+/// 4. huersitics
 fn get_default_package_manager() -> String {
-    let os_release = os_release::OsRelease::new().unwrap();
-    let distro = os_release.id.as_str();
+    let config = Config::parse();
+    if let Some(default_package_manager) = config.default_package_manager {
+        return default_package_manager;
+    } else if let Ok(default_package_manager) = env::var("SAPM_DEFAULT_PACKAGE_MANAGER") {
+        return default_package_manager;
+    } else {
+        let os_release = os_release::OsRelease::new().unwrap();
+        let distro = os_release.id.as_str();
 
-    // Based of off https://github.com/chef/os_release
-    let default_package_manager = match distro {
-        "cumulus-linux" | "debian" | "elementary" | "kali" | "linuxmint" | "pop" | "raspbian"
-        | "ubuntu" => "apt",
+        // Based of off https://github.com/chef/os_release
+        let default_package_manager = match distro {
+            "cumulus-linux" | "debian" | "elementary" | "kali" | "linuxmint" | "pop"
+            | "raspbian" | "ubuntu" => "apt",
 
-        "almalinux" | "amzn" | "centos" | "clearos" | "fedora" | "mageia" | "ol" | "rhel"
-        | "rocky" | "scientific" | "virtuozzo" | "xenenterprise" => "dnf",
+            "almalinux" | "amzn" | "centos" | "clearos" | "fedora" | "mageia" | "ol" | "rhel"
+            | "rocky" | "scientific" | "virtuozzo" | "xenenterprise" => "dnf",
 
-        "nixos" => "nix",
+            "nixos" => "nix",
 
-        "antergos" | "arcolinux" | "arch" | "archarm" | "endeavouros" | "manjaro"
-        | "manjaro-arm" => "pacman",
+            "antergos" | "arcolinux" | "arch" | "archarm" | "endeavouros" | "manjaro"
+            | "manjaro-arm" => "pacman",
 
-        "gentoo" => "portage",
+            "gentoo" => "portage",
 
-        "sled" | "suse" => "zypper",
+            "sled" | "suse" => "zypper",
 
-        _ => "",
-    };
-    return String::from(default_package_manager);
+            _ => "",
+        };
+        return String::from(default_package_manager);
+    }
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Subcommand)]
@@ -105,10 +111,58 @@ fn get_aliases_of(sub_command: SubCommand) -> Vec<&'static str> {
     return aliases;
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct Config {
     pub default_package_manager: Option<String>,
     pub all_package_managers: Option<Vec<String>>,
+}
+
+impl Config {
+    fn new() -> Config {
+        return Config {
+            default_package_manager: None,
+            all_package_managers: None,
+        };
+    }
+
+    /// Attempts to parse `conf.toml` from:
+    /// 1. `$XDG_CONFIG_HOME/sapm/conf.toml`
+    /// 2. `/etc/sapm/conf.toml`
+    /// 3. `env` todo()!
+    /// 4. `/usr/share/sapm/conf.toml` (it is assumed that this always exist)
+    pub fn parse() -> Self {
+        let config_files = [
+            dirs::config_dir().unwrap().join("sapm/conf.toml"),
+            PathBuf::from("/etc/sapm/conf.toml"),
+            PathBuf::from("/usr/share/sapm/conf.toml"),
+        ];
+
+        let mut config = Self::new();
+
+        for file in config_files {
+            if let Some(new_config) = Self::from_file(file) {
+                config = config.merge(new_config);
+            }
+        }
+
+        return config;
+    }
+
+    fn merge(self, other: Config) -> Self {
+        Self {
+            default_package_manager: self
+                .default_package_manager
+                .or(other.default_package_manager),
+            all_package_managers: self.all_package_managers.or(other.all_package_managers),
+        }
+    }
+
+    fn from_file(path: std::path::PathBuf) -> Option<Self> {
+        if let Ok(file) = std::fs::read_to_string(path) {
+            return Some(toml::from_str::<Config>(&file).unwrap());
+        }
+        return None;
+    }
 }
 
 pub struct Message<'a> {
@@ -118,15 +172,19 @@ pub struct Message<'a> {
 }
 
 impl Message<'_> {
-    pub fn new<'a>(label: Label, message: &'a str, offender: &'a str) -> Self {
+    pub fn new<'a>(label: Label, message: &'a str, offender: &'a str) -> Message<'a> {
         return Message {
-            label,
-            &message,
-            &offender,
+            label: label,
+            message: message,
+            offender: offender,
         };
     }
     pub fn to_string(self) -> String {
         format!("{self}")
+    }
+
+    pub fn printmsg(message: Message) {
+        println!("{message}");
     }
 }
 
@@ -134,7 +192,7 @@ impl Display for Message<'_> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(
             f,
-            "({} {}: {})",
+            "{} {}: {}",
             self.label,
             self.message.white().bold(),
             self.offender.yellow()
@@ -157,6 +215,6 @@ impl Label {
 
 impl Display for Label {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "({})", self.to_string())
+        write!(f, "{}", self.to_string())
     }
 }
