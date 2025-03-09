@@ -2,7 +2,7 @@ use std::process::ExitCode;
 
 use clap::Parser;
 
-use sapm::cli::{Config, Label, Message, SubCommand};
+use sapm::cli::{Config, Label, Message};
 use sapm::modules::cli;
 use sapm::modules::package_manager;
 
@@ -10,7 +10,7 @@ fn main() -> ExitCode {
     let mut args = cli::Cli::parse();
     let config = Config::parse();
 
-    if args.package_manager == "all" && args.sub_command == SubCommand::Update {
+    if args.package_manager == "all" {
         let all_package_managers = (config.all_package_managers).expect(
             &Message::new(
                 Label::Error,
@@ -19,7 +19,6 @@ fn main() -> ExitCode {
             )
             .to_string(),
         );
-
         for package_manager in all_package_managers {
             args.package_manager = package_manager.to_string();
             if args.dry_run {

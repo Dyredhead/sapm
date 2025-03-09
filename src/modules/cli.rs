@@ -35,10 +35,10 @@ pub struct Cli {
     pub sub_command: SubCommand,
 }
 
-/// Attempts to get `default_package_manager` from :
+/// Attempts to get `default_package_manager` from:
 /// 1. `conf.toml`
-/// 3. `env`
-/// 4. huersitics
+/// 2. `env`
+/// 3. huersitics
 fn get_default_package_manager() -> String {
     let config = Config::parse();
     if let Some(default_package_manager) = config.default_package_manager {
