@@ -20,7 +20,7 @@ pub struct PackageManager {
 
 impl PackageManager {
     pub fn execute_command(command_string: &str) -> io::Result<ExitStatus> {
-        return Command::new("sh").arg("-c").arg(command_string).status();
+        Command::new("sh").arg("-c").arg(command_string).status()
     }
 
     pub fn match_sapm_subcommand_to_package_manager_command_string(

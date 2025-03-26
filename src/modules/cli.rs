@@ -1,3 +1,5 @@
+#![allow(clippy::needless_return)]
+
 use std::{
     env,
     fmt::{self, Display},
@@ -175,13 +177,10 @@ pub struct Message<'a> {
 impl Message<'_> {
     pub fn new<'a>(label: Label, message: &'a str, offender: &'a str) -> Message<'a> {
         return Message {
-            label: label,
-            message: message,
-            offender: offender,
+            label,
+            message,
+            offender,
         };
-    }
-    pub fn to_string(self) -> String {
-        format!("{self}")
     }
 
     pub fn printmsg(message: Message) {

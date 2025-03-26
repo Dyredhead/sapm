@@ -34,7 +34,7 @@ fn main() -> ExitCode {
             run_cmd(&args);
         }
     }
-    return ExitCode::SUCCESS;
+    ExitCode::SUCCESS
 }
 
 fn run_cmd(args: &cli::Cli) -> ExitCode {
@@ -79,9 +79,9 @@ fn run_cmd(args: &cli::Cli) -> ExitCode {
         }
     }
     if status.success() {
-        return ExitCode::SUCCESS;
+        ExitCode::SUCCESS
     } else {
-        return ExitCode::FAILURE;
+        ExitCode::FAILURE
     }
 }
 
