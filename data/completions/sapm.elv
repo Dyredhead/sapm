@@ -20,6 +20,8 @@ set edit:completion:arg-completer[sapm] = {|@words|
         &'sapm'= {
             cand --package-manager 'Use the specified package manager instead of the default'
             cand --pm 'Use the specified package manager instead of the default'
+            cand -n 'n'
+            cand --dry-run 'dry-run'
             cand -v 'Show the command that SAPM will execute'
             cand --verbose 'Show the command that SAPM will execute'
             cand -h 'Print help'

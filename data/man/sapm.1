@@ -5,17 +5,20 @@
 sapm \- A System Agnostic Package Manager (SAPM) which provides basic but useful functionality.
 Should NOT be run as root, as it will prompt for sudo password if needed
 .SH SYNOPSIS
-\fBsapm\fR [\fB\-\-package\-manager\fR] [\fB\-v\fR|\fB\-\-verbose\fR] [\fB\-h\fR|\fB\-\-help\fR] [\fB\-V\fR|\fB\-\-version\fR] <\fIsubcommands\fR>
+\fBsapm\fR [\fB\-\-package\-manager\fR] [\fB\-n\fR|\fB\-\-dry\-run\fR] [\fB\-v\fR|\fB\-\-verbose\fR] [\fB\-h\fR|\fB\-\-help\fR] [\fB\-V\fR|\fB\-\-version\fR] <\fIsubcommands\fR>
 .SH DESCRIPTION
 A System Agnostic Package Manager (SAPM) which provides basic but useful functionality.
 Should NOT be run as root, as it will prompt for sudo password if needed
 .SH OPTIONS
 .TP
-\fB\-\-package\-manager\fR=\fIPACKAGE_MANAGER\fR [default: ]
+\fB\-\-package\-manager\fR=\fIPACKAGE_MANAGER\fR [default: aur]
 Use the specified package manager instead of the default
 .RS
 May also be specified with the \fBSAPM_DEFAULT_PACKAGE_MANAGER\fR environment variable. 
 .RE
+.TP
+\fB\-n\fR, \fB\-\-dry\-run\fR
+
 .TP
 \fB\-v\fR, \fB\-\-verbose\fR
 Show the command that SAPM will execute

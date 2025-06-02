@@ -28,31 +28,23 @@ impl PackageManager {
         sub_command: SubCommand,
     ) -> String {
         match sub_command {
-            SubCommand::Info { package } => {
-                return package_manager.info + " " + &package;
-            }
+            SubCommand::Info { package } => package_manager.info + " " + &package,
             SubCommand::Install { packages } => {
-                return package_manager.install + " " + &(packages.join(" "));
+                package_manager.install + " " + &(packages.join(" "))
             }
-            SubCommand::List => {
-                return package_manager.list;
-            }
-            SubCommand::Search { package } => {
-                return package_manager.search + " " + &package;
-            }
+            SubCommand::List => package_manager.list,
+            SubCommand::Search { package } => package_manager.search + " " + &package,
             SubCommand::Uninstall { packages } => {
-                return package_manager.uninstall + " " + &(packages.join(" "));
+                package_manager.uninstall + " " + &(packages.join(" "))
             }
-            SubCommand::Update => {
-                return package_manager.update;
-            }
+            SubCommand::Update => package_manager.update,
         }
     }
 
-    // TODO: maybe use another format for the package manager config that is not json
     pub fn from_name(name: &str) -> Option<Self> {
         let package_manager_directories = [
-            // PathBuf::from("$XDG_DATA_HOME/sapm/package_managers"),
+            dirs::config_dir().unwrap().join("sapm/package_managers"),
+            dirs::data_dir().unwrap().join("sapm/package_managers"),
             PathBuf::from("/etc/sapm/package_managers"),
             PathBuf::from("/usr/share/sapm/package_managers"),
             PathBuf::from("/usr/share/sapm/vendor_package_managers.d"),
@@ -61,24 +53,21 @@ impl PackageManager {
             if let Ok(package_managers) = std::fs::read_dir(directory) {
                 for package_manager in package_managers {
                     let package_manager = package_manager.unwrap();
-                    if package_manager.file_name() == (name.to_string() + ".json").as_str() {
+                    if package_manager.file_name() == (name.to_string() + ".toml").as_str() {
                         return Self::from_file(package_manager.path());
                     }
                 }
             }
         }
-        return None;
+        None
     }
     fn from_file(path: std::path::PathBuf) -> Option<Self> {
         if path.is_file() {
-            let json = std::fs::read_to_string(path).unwrap();
-            return Self::from_json(&json);
+            let toml = std::fs::read_to_string(&path).unwrap();
+            let package_manager: PackageManager = toml::from_str(&toml)
+                .unwrap_or_else(|_| panic!("{:?} is incorrectly formatted", path));
+            return Some(package_manager);
         }
-        return None;
-    }
-    fn from_json(json: &str) -> Option<Self> {
-        let package_manager: PackageManager =
-            serde_json::from_str(json).expect(&format!("{json} is incorrectly formatted"));
-        return Some(package_manager);
+        None
     }
 }

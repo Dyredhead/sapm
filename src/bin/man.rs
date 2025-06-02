@@ -6,4 +6,5 @@ use sapm::modules::cli;
 fn main() {
     let cmd = cli::Cli::command();
     let _ = generate_to(cmd, "./data/man");
+    println!("✅ Generated man pages");
 }

@@ -40,7 +40,7 @@ pub struct Cli {
 /// Attempts to get `default_package_manager` from:
 /// 1. `env`
 /// 2. `conf.toml`
-/// 3. huersitics
+/// 3. heuristics
 fn get_default_package_manager() -> String {
     let config = Config::parse();
     if let Ok(default_package_manager) = env::var("SAPM_DEFAULT_PACKAGE_MANAGER") {

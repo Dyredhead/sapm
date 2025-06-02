@@ -8,4 +8,7 @@ fn main() {
     for &shell in Shell::value_variants() {
         let _ = generate_to(shell, &mut cmd, "sapm", "./data/completions");
     }
+
+    let shells = Shell::value_variants().to_owned();
+    println!("✅ Generated completions for: {:?}", shells)
 }

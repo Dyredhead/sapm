@@ -15,8 +15,10 @@ _sapm() {
 
     local context curcontext="$curcontext" state line
     _arguments "${_arguments_options[@]}" : \
-'--package-manager=[Use the specified package manager instead of the default]:PACKAGE_MANAGER: ' \
-'--pm=[Use the specified package manager instead of the default]:PACKAGE_MANAGER: ' \
+'--package-manager=[Use the specified package manager instead of the default]:PACKAGE_MANAGER:_default' \
+'--pm=[Use the specified package manager instead of the default]:PACKAGE_MANAGER:_default' \
+'-n[]' \
+'--dry-run[]' \
 '-v[Show the command that SAPM will execute]' \
 '--verbose[Show the command that SAPM will execute]' \
 '-h[Print help]' \
@@ -36,28 +38,28 @@ _sapm() {
 _arguments "${_arguments_options[@]}" : \
 '-h[Print help]' \
 '--help[Print help]' \
-':package:' \
+':package:_default' \
 && ret=0
 ;;
 (show)
 _arguments "${_arguments_options[@]}" : \
 '-h[Print help]' \
 '--help[Print help]' \
-':package:' \
+':package:_default' \
 && ret=0
 ;;
 (install)
 _arguments "${_arguments_options[@]}" : \
 '-h[Print help]' \
 '--help[Print help]' \
-'*::packages:' \
+'*::packages:_default' \
 && ret=0
 ;;
 (add)
 _arguments "${_arguments_options[@]}" : \
 '-h[Print help]' \
 '--help[Print help]' \
-'*::packages:' \
+'*::packages:_default' \
 && ret=0
 ;;
 (list)
@@ -76,28 +78,28 @@ _arguments "${_arguments_options[@]}" : \
 _arguments "${_arguments_options[@]}" : \
 '-h[Print help]' \
 '--help[Print help]' \
-':package:' \
+':package:_default' \
 && ret=0
 ;;
 (find)
 _arguments "${_arguments_options[@]}" : \
 '-h[Print help]' \
 '--help[Print help]' \
-':package:' \
+':package:_default' \
 && ret=0
 ;;
 (uninstall)
 _arguments "${_arguments_options[@]}" : \
 '-h[Print help]' \
 '--help[Print help]' \
-'*::packages:' \
+'*::packages:_default' \
 && ret=0
 ;;
 (remove)
 _arguments "${_arguments_options[@]}" : \
 '-h[Print help]' \
 '--help[Print help]' \
-'*::packages:' \
+'*::packages:_default' \
 && ret=0
 ;;
 (update)
