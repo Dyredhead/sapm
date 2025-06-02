@@ -41,21 +41,7 @@ _arguments "${_arguments_options[@]}" : \
 ':package:_default' \
 && ret=0
 ;;
-(show)
-_arguments "${_arguments_options[@]}" : \
-'-h[Print help]' \
-'--help[Print help]' \
-':package:_default' \
-&& ret=0
-;;
 (install)
-_arguments "${_arguments_options[@]}" : \
-'-h[Print help]' \
-'--help[Print help]' \
-'*::packages:_default' \
-&& ret=0
-;;
-(add)
 _arguments "${_arguments_options[@]}" : \
 '-h[Print help]' \
 '--help[Print help]' \
@@ -68,20 +54,7 @@ _arguments "${_arguments_options[@]}" : \
 '--help[Print help]' \
 && ret=0
 ;;
-(ls)
-_arguments "${_arguments_options[@]}" : \
-'-h[Print help]' \
-'--help[Print help]' \
-&& ret=0
-;;
 (search)
-_arguments "${_arguments_options[@]}" : \
-'-h[Print help]' \
-'--help[Print help]' \
-':package:_default' \
-&& ret=0
-;;
-(find)
 _arguments "${_arguments_options[@]}" : \
 '-h[Print help]' \
 '--help[Print help]' \
@@ -95,20 +68,7 @@ _arguments "${_arguments_options[@]}" : \
 '*::packages:_default' \
 && ret=0
 ;;
-(remove)
-_arguments "${_arguments_options[@]}" : \
-'-h[Print help]' \
-'--help[Print help]' \
-'*::packages:_default' \
-&& ret=0
-;;
 (update)
-_arguments "${_arguments_options[@]}" : \
-'-h[Print help]' \
-'--help[Print help]' \
-&& ret=0
-;;
-(upgrade)
 _arguments "${_arguments_options[@]}" : \
 '-h[Print help]' \
 '--help[Print help]' \
@@ -167,17 +127,11 @@ esac
 _sapm_commands() {
     local commands; commands=(
 'info:Get information about the specified package' \
-'show:Get information about the specified package' \
 'install:Install the specified package(s)' \
-'add:Install the specified package(s)' \
 'list:List all of the installed packages' \
-'ls:List all of the installed packages' \
 'search:Search for the specified package' \
-'find:Search for the specified package' \
 'uninstall:Uninstall the specified package(s)' \
-'remove:Uninstall the specified package(s)' \
 'update:Update all packages' \
-'upgrade:Update all packages' \
 'help:Print this message or the help of the given subcommand(s)' \
     )
     _describe -t commands 'sapm commands' commands "$@"

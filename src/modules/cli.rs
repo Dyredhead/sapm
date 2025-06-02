@@ -101,16 +101,18 @@ pub enum SubCommand {
     Update,
 }
 
+// TODO: allow loading aliases from conf.toml
 fn get_aliases_of(sub_command: SubCommand) -> Vec<&'static str> {
-    let aliases = match sub_command {
-        SubCommand::Info { package: _ } => vec!["show"],
-        SubCommand::Install { packages: _ } => vec!["add"],
-        SubCommand::List {} => vec!["ls"],
-        SubCommand::Search { package: _ } => vec!["find"],
-        SubCommand::Uninstall { packages: _ } => vec!["remove"],
-        SubCommand::Update {} => vec!["upgrade"],
-    };
-    return aliases;
+    // let aliases = match sub_command {
+    //     SubCommand::Info { package: _ } => vec!["show"],
+    //     SubCommand::Install { packages: _ } => vec!["add"],
+    //     SubCommand::List {} => vec!["ls"],
+    //     SubCommand::Search { package: _ } => vec!["find"],
+    //     SubCommand::Uninstall { packages: _ } => vec!["remove"],
+    //     SubCommand::Update {} => vec!["upgrade"],
+    // };
+    // return aliases;
+    return vec![];
 }
 
 #[derive(Serialize, Deserialize, Clone)]

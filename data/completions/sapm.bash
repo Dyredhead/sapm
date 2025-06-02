@@ -12,12 +12,6 @@ _sapm() {
             ",$1")
                 cmd="sapm"
                 ;;
-            sapm,add)
-                cmd="sapm__install"
-                ;;
-            sapm,find)
-                cmd="sapm__search"
-                ;;
             sapm,help)
                 cmd="sapm__help"
                 ;;
@@ -30,25 +24,13 @@ _sapm() {
             sapm,list)
                 cmd="sapm__list"
                 ;;
-            sapm,ls)
-                cmd="sapm__list"
-                ;;
-            sapm,remove)
-                cmd="sapm__uninstall"
-                ;;
             sapm,search)
                 cmd="sapm__search"
-                ;;
-            sapm,show)
-                cmd="sapm__info"
                 ;;
             sapm,uninstall)
                 cmd="sapm__uninstall"
                 ;;
             sapm,update)
-                cmd="sapm__update"
-                ;;
-            sapm,upgrade)
                 cmd="sapm__update"
                 ;;
             sapm__help,help)
@@ -79,7 +61,7 @@ _sapm() {
 
     case "${cmd}" in
         sapm)
-            opts="-n -v -h -V --pm --package-manager --dry-run --verbose --help --version info show install add list ls search find uninstall remove update upgrade help"
+            opts="-n -v -h -V --pm --package-manager --dry-run --verbose --help --version info install list search uninstall update help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 1 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0

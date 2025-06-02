@@ -29,24 +29,14 @@ set edit:completion:arg-completer[sapm] = {|@words|
             cand -V 'Print version'
             cand --version 'Print version'
             cand info 'Get information about the specified package'
-            cand show 'Get information about the specified package'
             cand install 'Install the specified package(s)'
-            cand add 'Install the specified package(s)'
             cand list 'List all of the installed packages'
-            cand ls 'List all of the installed packages'
             cand search 'Search for the specified package'
-            cand find 'Search for the specified package'
             cand uninstall 'Uninstall the specified package(s)'
-            cand remove 'Uninstall the specified package(s)'
             cand update 'Update all packages'
-            cand upgrade 'Update all packages'
             cand help 'Print this message or the help of the given subcommand(s)'
         }
         &'sapm;info'= {
-            cand -h 'Print help'
-            cand --help 'Print help'
-        }
-        &'sapm;show'= {
             cand -h 'Print help'
             cand --help 'Print help'
         }
@@ -54,15 +44,7 @@ set edit:completion:arg-completer[sapm] = {|@words|
             cand -h 'Print help'
             cand --help 'Print help'
         }
-        &'sapm;add'= {
-            cand -h 'Print help'
-            cand --help 'Print help'
-        }
         &'sapm;list'= {
-            cand -h 'Print help'
-            cand --help 'Print help'
-        }
-        &'sapm;ls'= {
             cand -h 'Print help'
             cand --help 'Print help'
         }
@@ -70,23 +52,11 @@ set edit:completion:arg-completer[sapm] = {|@words|
             cand -h 'Print help'
             cand --help 'Print help'
         }
-        &'sapm;find'= {
-            cand -h 'Print help'
-            cand --help 'Print help'
-        }
         &'sapm;uninstall'= {
             cand -h 'Print help'
             cand --help 'Print help'
         }
-        &'sapm;remove'= {
-            cand -h 'Print help'
-            cand --help 'Print help'
-        }
         &'sapm;update'= {
-            cand -h 'Print help'
-            cand --help 'Print help'
-        }
-        &'sapm;upgrade'= {
             cand -h 'Print help'
             cand --help 'Print help'
         }
