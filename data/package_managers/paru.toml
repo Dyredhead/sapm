@@ -1,0 +1,6 @@
+info = "paru --sync --info"
+install = "paru --sync"
+list = "paru --query"
+search = "paru --sync --search"
+uninstall = "paru --remove"
+update = "paru --sync --refresh --sysupgrade"
