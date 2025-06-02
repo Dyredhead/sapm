@@ -11,12 +11,17 @@ fn main() -> ExitCode {
     let config = Config::parse();
 
     if args.package_manager == "all" {
-        let all_package_managers = (config.all_package_managers).unwrap_or_else(|| { panic!("{}", Message::new(
-                Label::Error,
-                "Config field not found",
-                "all_package_managers",
+        let all_package_managers = (config.all_package_managers).unwrap_or_else(|| {
+            panic!(
+                "{}",
+                Message::new(
+                    Label::Error,
+                    "Config field not found",
+                    "all_package_managers",
+                )
+                .to_string()
             )
-            .to_string()) });
+        });
         for package_manager in all_package_managers {
             args.package_manager = package_manager.to_string();
             if args.dry_run {
@@ -34,12 +39,18 @@ fn main() -> ExitCode {
 }
 
 fn run_cmd(args: &cli::Cli) -> ExitCode {
-    let package_manager = package_manager::PackageManager::from_name(&args.package_manager).unwrap_or_else(|| { panic!("{}", Message::new(
-            Label::Error,
-            "No such package manager",
-            &args.package_manager,
-        )
-        .to_string()) });
+    let package_manager = package_manager::PackageManager::from_name(&args.package_manager)
+        .unwrap_or_else(|| {
+            panic!(
+                "{}",
+                Message::new(
+                    Label::Error,
+                    "No such package manager",
+                    &args.package_manager,
+                )
+                .to_string()
+            )
+        });
 
     let command_string =
         package_manager::PackageManager::match_sapm_subcommand_to_package_manager_command_string(
@@ -80,12 +91,18 @@ fn run_cmd(args: &cli::Cli) -> ExitCode {
 }
 
 fn print_cmd(args: &cli::Cli) {
-    let package_manager = package_manager::PackageManager::from_name(&args.package_manager).unwrap_or_else(|| { panic!("{}", Message::new(
-            Label::Error,
-            "No such package manager",
-            &args.package_manager,
-        )
-        .to_string()) });
+    let package_manager = package_manager::PackageManager::from_name(&args.package_manager)
+        .unwrap_or_else(|| {
+            panic!(
+                "{}",
+                Message::new(
+                    Label::Error,
+                    "No such package manager",
+                    &args.package_manager,
+                )
+                .to_string()
+            )
+        });
 
     let command_string =
         package_manager::PackageManager::match_sapm_subcommand_to_package_manager_command_string(
